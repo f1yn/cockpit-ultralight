@@ -1,0 +1,35 @@
+{
+	"name": "cockpit-ultralight",
+	"description": "Minimal scaffolding for a cockpit module (tsx + esbuld)",
+	"type": "module",
+	"author": "Flynn Buckingham",
+	"license": "MIT",
+	"engines": {
+		"node": ">= 20"
+	},
+	"scripts": {
+		"dev": "NODE_ENV=development tsx ./scripts/build.ts",
+		"build": "tsx ./scripts/build.ts",
+		"link:local": "ln -s $PWD/dist \"$HOME/.local/share/cockpit/$(basename $PWD)\""
+	},
+	"dependencies": {
+		"@patternfly/react-core": "5.2.3",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0"
+	},
+	"devDependencies": {
+		"@types/react": "^18.2.69",
+		"@types/react-dom": "^18.2.22",
+		"@types/node": "20.11.30",
+		"esbuild": "^0.20.2",
+		"prettier": "^3.2.5",
+		"tsx": "^4.7.1",
+		"typescript": "^5.4.3"
+	},
+	"prettier": {
+		"useTabs": true,
+		"options": {
+			"editorconfig": true
+		}
+	}
+}

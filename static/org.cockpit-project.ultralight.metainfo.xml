@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>org.cockpit_project.cockpit_ultralight</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <name>Cockpit Ultralight</name>
+  <summary>Project template for developing cockpit plugins</summary>
+  <description>
+    <p>
+      Project template for developing cockpit plugins
+    </p>
+  </description>
+  <extends>org.cockpit_project.cockpit</extends>
+  <launchable type="cockpit-manifest">cockpit-ultralight</launchable>
+  <url type="homepage">https://github.com/f1yn/cockpit-ultralight</url>
+  <url type="bugtracker">https://github.com/f1yn/cockpit-ultralight</url>
+  <update_contact>cockpit-devel_AT_lists.fedorahosted.org</update_contact>
+</component>

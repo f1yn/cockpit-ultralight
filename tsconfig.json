@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"rootDir": ".",
+		"jsx": "react",
+		"lib": ["dom", "es2020"],
+		"paths": {
+			"cockpit": ["./src/lib/cockpit"],
+			"@lib/*": ["./src/lib/*"],
+			"@assets/*": [
+				"node_modules/@patternfly/react-core/dist/styles/assets/*"
+			]
+		},
+		"moduleResolution": "bundler",
+		"noEmit": true,
+		"strict": true,
+		"module": "es2020",
+		"target": "es2020"
+	},
+	"include": ["src/**/*"]
+}
