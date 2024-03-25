@@ -1,5 +1,3 @@
-#
-
 <div align="center">
   <img width=320" height="320" src="static/cockpit-ultralight-icon.svg" />
   <br>
@@ -63,9 +61,9 @@ npm run dev
 
 ## Example
 
-**Without adding anything new, you'll be gretted by a screen like this:**
+**Without adding anything new, you'll be greeted by a screen like this:**
 
--   A simple screen build using patternfly components
+-   A simple screen build using [patternfly](https://www.patternfly.org/) components
 -   A statically loaded image
 -   A live preview of the current contents of `/etc/hostname`
 -   A stored output of the latest execution of the `hostnamectl` (in a user shell)
@@ -76,7 +74,6 @@ npm run dev
 
 <img width="1207" alt="Screenshot 2024-03-25 154706" src="https://github.com/f1yn/cockpit-ultralight/assets/6565187/18894618-81f5-4c77-a0fa-3dec21700a26">
 
-
 ## Project structure
 
 -   `src/` The primary source
@@ -86,10 +83,10 @@ npm run dev
 
 ## Adding styles
 
-One of the concepts of ultralight is not carrying redundant weight, which means by default, the patternfly styles aren't included in the output, as they are already bundled and provided by the parent cockpit window (same origin frames have access to the parent and window contexts). These urls are copied from the parent iframe [here](./static/inheritStyles.js).
+One of the concepts of ultralight is not carrying redundant weight, which means by default, the [patternfly](https://www.patternfly.org/) styles aren't included in the output, as they are already bundled and provided by the parent cockpit window (same origin frames have access to the parent and window contexts). These urls are copied from the parent iframe [here](./src/init.ts).
 
 to add your own styles, simply add a css file to your `src` directory, and import said css file within `app.tsx` (or any other component within your app). This relies on esbuild css bundling.
 
 ## Swapping from React/changing the build
 
-The developers of starter-kit mention that keeping the design language consistent is pretty important, so using their React patternfly components is probably the easiest way to integrate with their structure. If, for some reason you find React abhorrently unbearable (i.e you're a Vue or Angular dev), modifying the `scripts/build.ts` file to match your needs should be straightforward.
+The developers of starter-kit mention that keeping the design language consistent is pretty important, so using their React [patternfly](https://www.patternfly.org/) components is probably the easiest way to integrate with their structure. If, for some reason you find React abhorrently unbearable (i.e you're a Vue or Angular dev), modifying the `scripts/build.ts` file to match your needs should be straightforward.
