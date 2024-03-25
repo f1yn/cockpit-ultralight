@@ -34,12 +34,6 @@ Until this project is fully stabilized (as I'm going to be adding features), it'
 
 Documentation for the other way to do this (manually creating a repo with a upstream) is coming soon, but multiple git origins is always a bit wonky to explain.
 
-```sh
-git clone https://github.com/f1yn/cockpit-ultralight
-```
-
-You can then remove the `.git` directory if present; opting to create a new repo with `git init` or your own CVS of choice.
-
 ## Setting up (any Linux)
 
 > I recommend using [fmn](https://github.com/Schniz/fnm) install for installing nodejs. It enables building more nodejs/npm projects in different shells. Otherwise, (Fedora) `sudo dnf install nodejs npm` (or equivalent on your Linux distribution).
@@ -69,13 +63,19 @@ npm run dev
 
 ## Example
 
-Without adding anything new, you'll be gretted by a screen like this:
-<img width="1207" alt="Screenshot 2024-03-25 131525" src="https://github.com/f1yn/cockpit-ultralight/assets/6565187/5766547b-8a24-4911-a48d-f68ebaf7a906">
+**Without adding anything new, you'll be gretted by a screen like this:**
 
 -   A simple screen build using patternfly components
 -   A statically loaded image
 -   A live preview of the current contents of `/etc/hostname`
 -   A stored output of the latest execution of the `hostnamectl` (in a user shell)
+
+<img width="1207" alt="Screenshot 2024-03-25 131525" src="https://github.com/f1yn/cockpit-ultralight/assets/6565187/5766547b-8a24-4911-a48d-f68ebaf7a906">
+
+**With dark mode:**
+
+<img width="1207" alt="Screenshot 2024-03-25 154706" src="https://github.com/f1yn/cockpit-ultralight/assets/6565187/18894618-81f5-4c77-a0fa-3dec21700a26">
+
 
 ## Project structure
 
