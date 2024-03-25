@@ -16,7 +16,7 @@ const context = await esbuild.context({
     target: ["es2020"],
     bundle: true,
     splitting: true,
-    entryPoints: ['./src/app.tsx'],
+    entryPoints: ['./src/app.tsx', './src/init.ts'],
     outdir: './dist',
     // Environment specific configurations
     metafile: isProduction,

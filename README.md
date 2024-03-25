@@ -12,6 +12,7 @@
 -   Lightweight. Focused on getting things live and in the air by focusing on providing a concise tooling environment
 -   Typescript support (for both code and build scripts).
 -   Recycles code and styles already present in the live cockpit environment (not needing the cockpit git tree to operate/test), removing the need for complicated build steps
+-   Dark mode synchronisation
 
 Being ultralight also means that we don't need to worry as much about what's inside `node_modules`. I would hope that developing a cockpit plugin would mean an individual would _only_ install trusted code when developing plugins.
 
@@ -21,7 +22,17 @@ Being ultralight also means that we don't need to worry as much about what's ins
 
 ## Using
 
-I recommend using the `Use as template` button located near the top of the repo, otherwise you can manually create a new project locally by running:
+<s>I recommend using the `Use as template` button located near the top of the repo, otherwise you can manually create a new project locally by running:</s>
+
+Until this project is fully stabilized (as I'm going to be adding features), it's recommended you setup a git repo manually. The easiest way to do this would be to fork the repository, and creating a different primary branch.
+
+1. Fork the repo
+2. Clone the repo locally
+3. `git branch -m main template` will move this upstream to `template`
+4. `git branch -b main` will create a main branch, that's based on template
+5. `git push` will sync your repo, assuming you've already setup git
+
+Documentation for the other way to do this (manually creating a repo with a upstream) is coming soon, but multiple git origins is always a bit wonky to explain.
 
 ```sh
 git clone https://github.com/f1yn/cockpit-ultralight
