@@ -31,7 +31,7 @@ You can then remove the `.git` directory if present; opting to create a new repo
 
 ## Setting up (any Linux)
 
-> I recommend using [fmn](https://github.com/Schniz/fnm) install fo installing nodejs. It enables building more nodejs/npm projects in more different shells. Otherwise, (Fedora) `sudo dnf install nodejs npm` (or equivalent on your Linux distribution).
+> I recommend using [fmn](https://github.com/Schniz/fnm) install for installing nodejs. It enables building more nodejs/npm projects in different shells. Otherwise, (Fedora) `sudo dnf install nodejs npm` (or equivalent on your Linux distribution).
 
 ## Building and testing (any Linux, any shell)
 
@@ -55,6 +55,16 @@ npm run dev
 ```
 
 > Until live reloads are figured out, you'll need to manually refresh that page after updates
+
+## Example
+
+Without adding anything new, you'll be gretted by a screen like this:
+<img width="1207" alt="Screenshot 2024-03-25 131525" src="https://github.com/f1yn/cockpit-ultralight/assets/6565187/5766547b-8a24-4911-a48d-f68ebaf7a906">
+
+-   A simple screen build using patternfly components
+-   A statically loaded image
+-   A live preview of the current contents of `/etc/hostname`
+-   A stored output of the latest execution of the `hostnamectl` (in a user shell)
 
 ## Project structure
 
