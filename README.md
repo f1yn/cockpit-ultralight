@@ -19,13 +19,11 @@ Being ultralight also means that we don't need to worry as much about what's ins
 >
 > Specific tooling is being planned for [building distribution packages](https://github.com/f1yn/cockpit-ultralight/issues/1).
 
-## Using
+## Using this starter project
 
-<s>I recommend using the `Use as template` button located near the top of the repo, otherwise you can manually create a new project locally by running:</s>
+Here's a couple ways to get started, allowing you to create and manage your own projects with this as a base.
 
-Until this project is fully stabilized (as I'm going to be adding features), it's recommended you setup a git repo manually. The easiest way to do this would be to fork the repository, and creating a different primary branch.
-
-### Method A (GitHub UI)
+### Method A - Forking via GitHub
 
 1. Fork the repo
 2. Clone the repo locally
@@ -33,12 +31,12 @@ Until this project is fully stabilized (as I'm going to be adding features), it'
 4. `git branch -b main` will create a main branch, that's based on template
 5. `git push` will sync your repo, assuming you've already setup git
 
-### Method B (Custom Repository)
+### Method B - Creating Custom Repository (any platform)
 
 This method is useful for developing more than plugin at a time, and makes porting updates a little easier (I'm currently doing this with a few projects).
 
 1. Create a new git project on your provider of choice (i.e GitHub)
-2. Clone the ultralight repo locally, prefferably in a directory that will match your project:
+2. Clone the ultralight repo locally, preferably in a directory that will match your project:
 
     ```bash
     git clone https://github.com/f1yn/cockpit-ultralight my-cockpit-project
@@ -65,26 +63,33 @@ This method is useful for developing more than plugin at a time, and makes porti
 
 > **Important:** It's recommended to use [fmn](https://github.com/Schniz/fnm) install providing nodejs. It enables building more nodejs/npm projects in different shells. Otherwise, (Fedora) `sudo dnf install nodejs npm` (or equivalent on your Linux distribution).
 
+### Installing the project
+
+```
+npm install
+```
+
+That's it.
+
 ### Building and testing (any Linux, any shell)
 
 1. Produce a static production build of the project with the following command
 
-```sh
-npm build
-```
+    ```sh
+    npm build
+    ```
 
 2. Link the project to your local environment
 
-```sh
-mkdir -p ~/.local/share/cockpit
-npm run link:local
-```
+    ```sh
+    mkdir -p ~/.local/share/cockpit
+    npm run link:local
+    ```
 
 3. Develop within the project (eventually with live reloads)
-
-```sh
-npm run dev
-```
+    ```sh
+    npm run dev
+    ```
 
 After changes are made, assuming you followed the link directions, the plugin will refresh the page
 automatically!
@@ -93,8 +98,8 @@ automatically!
 
 **Without adding anything new, you'll be greeted by a screen like this:**
 
--   A simple screen build using [patternfly](https://www.patternfly.org/) components
--   A statically loaded image
+-   A simple screen built using [patternfly](https://www.patternfly.org/) components
+-   A statically loaded SVG (from the `/static` directory)
 -   A live preview of the current contents of `/etc/hostname`
 -   A stored output of the latest execution of the `hostnamectl` (in a user shell)
 
