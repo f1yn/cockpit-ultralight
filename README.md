@@ -25,19 +25,47 @@ Being ultralight also means that we don't need to worry as much about what's ins
 
 Until this project is fully stabilized (as I'm going to be adding features), it's recommended you setup a git repo manually. The easiest way to do this would be to fork the repository, and creating a different primary branch.
 
+### Method A (GitHub UI)
+
 1. Fork the repo
 2. Clone the repo locally
 3. `git branch -m main template` will move this upstream to `template`
 4. `git branch -b main` will create a main branch, that's based on template
 5. `git push` will sync your repo, assuming you've already setup git
 
-Documentation for the other way to do this (manually creating a repo with a upstream) is coming soon, but multiple git origins is always a bit wonky to explain.
+### Method B (Custom Repository)
+
+This method is useful for developing more than plugin at a time, and makes porting updates a little easier (I'm currently doing this with a few projects).
+
+1. Create a new git project on your provider of choice (i.e GitHub)
+2. Clone the ultralight repo locally, prefferably in a directory that will match your project:
+
+    ```bash
+    git clone https://github.com/f1yn/cockpit-ultralight my-cockpit-project
+    ```
+
+3. Rename the current origin to `template`:
+
+    ```bash
+    git remote rename origin template
+    ```
+
+4. Set your `origin` to your new project url
+
+    ```bash
+    git remote add origin https://your_target_git_repo
+    ```
+
+5. Push up your `main` branch
+    ```bash
+    git push -u origin main
+    ```
 
 ## Setting up (any Linux)
 
-> I recommend using [fmn](https://github.com/Schniz/fnm) install for installing nodejs. It enables building more nodejs/npm projects in different shells. Otherwise, (Fedora) `sudo dnf install nodejs npm` (or equivalent on your Linux distribution).
+> **Important:** It's recommended to use [fmn](https://github.com/Schniz/fnm) install providing nodejs. It enables building more nodejs/npm projects in different shells. Otherwise, (Fedora) `sudo dnf install nodejs npm` (or equivalent on your Linux distribution).
 
-## Building and testing (any Linux, any shell)
+### Building and testing (any Linux, any shell)
 
 1. Produce a static production build of the project with the following command
 
