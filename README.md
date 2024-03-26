@@ -102,7 +102,7 @@ automatically!
 
 **With dark mode:**
 
-<img width="1207" alt="Screenshot 2024-03-25 154706" src="https://github.com/f1yn/cockpit-ultralight/assets/6565187/18894618-81f5-4c77-a0fa-3dec21700a26">
+![Screenshot 2024-03-25 223505](https://github.com/f1yn/cockpit-ultralight/assets/6565187/6c0fe003-5713-408f-b3db-467390dcc4f6)
 
 ## Project structure
 
