@@ -31,8 +31,13 @@ const context = await esbuild.context({
         // patternfly app styles
         skipPatternflyStyles,
         // copies static files (again) when they're modified in development
-        isDevelopment && watchStaticDirPlugin
+        isDevelopment && watchStaticDirPlugin,
     ].filter(Boolean) as Plugin[],
+    // Enable better tree shaking by adding in the webpack classic flag here
+    // we also use it to allow reloading during a watch build
+    define: {
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+    }
 });
 
 

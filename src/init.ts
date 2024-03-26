@@ -32,6 +32,7 @@
             stylesFragment.appendChild(newTarget);
         });
 
+
     // Append the style tags in one go
     document.head.appendChild(stylesFragment);
 })();
@@ -61,9 +62,60 @@
     }
     // Detect dark mode on the parent, and utilize it's callback mechanism
     const match = parentWindow.matchMedia('(prefers-color-scheme: dark)');
-    console.log(match.matches)
-
     toggleDarkMode(match.matches);
     // Watch for changes in the system or browser state
     match.addEventListener('change', () => toggleDarkMode(match.matches));
 })();
+
+if (process.env.NODE_ENV === 'development') {
+    // Code below is only injected in DEVELOPMENT (tree shaking)
+    (async function autoReloader() {
+        // THIS CODE IS EXPERIMENTAL - DEV ONLY
+        // Because the frame document exists as a directory root, we can determine the directory we are in from
+        // the window.location. For the actual path to the local link (which is the ONLY preferred development setup)
+        // we rely on the cockpit connection to the host to resolve the user directory of the cockpit process. For now.
+        // the current user should suffice, but we can do more commands to make this reliable later on.
+        const pluginPathParts = window.location.pathname.split('/')
+        const pluginName = pluginPathParts[pluginPathParts.length - 2];
+
+        console.debug('[reloader] Sourcing cockpit userspace directory');
+        // originally, this was meant to be a websocket, but this became problematic over ssh connection
+        // so instead, we use the cockpit environment (which, on paper, will have access to the paths specified)
+        // @ts-ignore (avoid fixing this, window.cockpit isn't something we want)
+        const cockpitPluginPath = (await window.cockpit.script('echo "$HOME/.local/share/cockpit/"') || '').replace(/\n$/, '');
+        console.debug(`[reloader] Attempting to hone in on app dist location (plugin ID: ${pluginName})`);
+        const expectedManifestPath = `${cockpitPluginPath}${pluginName}/manifest.json`;
+
+        try {
+            expectedManifestPath
+            // @ts-ignore
+            await window.cockpit.script(`test -f '${expectedManifestPath}'`);
+        } catch (existError) {
+            // If we reach this point, there is something sus going on - let's bail out now before trying to pull a file watch 
+            console.error(`[reloader] Failed to confirm that "${expectedManifestPath}" is a real path. Cancelling watch mechanism`, existError);
+            return;
+        }
+
+        // The first iteration of watch is redundant for our needs
+        let initialWatch = false;
+
+        // @ts-ignore
+        const watch = window.cockpit.file(expectedManifestPath).watch(() => {
+            if (!initialWatch) {
+                console.debug('[reloader] Watch has been established')
+                initialWatch = true;
+                return;
+            }
+
+            console.debug('[reloader] Manifest update has been detected, refreshing in approx 1 second!')
+
+            // Reload when the manifest updates (give a little extra time as well)
+            setTimeout(() => window.location.reload(), 1000);
+
+            // Be good citizens - let's try and remove the watch before a refresh
+            window.addEventListener('beforeunload', () => {
+                watch.remove();
+            })
+        });
+    })();
+}

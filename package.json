@@ -18,9 +18,9 @@
 		"react-dom": "^18.2.0"
 	},
 	"devDependencies": {
+		"@types/node": "20.11.30",
 		"@types/react": "^18.2.69",
 		"@types/react-dom": "^18.2.22",
-		"@types/node": "20.11.30",
 		"esbuild": "^0.20.2",
 		"prettier": "^3.2.5",
 		"tsx": "^4.7.1",

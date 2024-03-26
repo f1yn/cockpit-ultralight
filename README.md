@@ -11,12 +11,13 @@
 -   Typescript support (for both code and build scripts).
 -   Recycles code and styles already present in the live cockpit environment (not needing the cockpit git tree to operate/test), removing the need for complicated build steps
 -   Dark mode synchronisation
+-   Live reloading functionality
 
 Being ultralight also means that we don't need to worry as much about what's inside `node_modules`. I would hope that developing a cockpit plugin would mean an individual would _only_ install trusted code when developing plugins.
 
 > The [cockpit/starter-kit](https://github.com/cockpit-project/starter-kit) project is very powerful, and does a lot more things than this project. I enjoy learning things the hard way to build up comprehension, and while providing focus to areas that I know very well. Being able to work with tooling and a more limited set of languages provides me with clarity when trying to solve problems. I'm hoping some of the improvements made here can be brought back upstream.
 >
-> Specific tooling is being planned for [live plugin reloads](https://github.com/f1yn/cockpit-ultralight/issues/2) and [building distribution packages](https://github.com/f1yn/cockpit-ultralight/issues/1).
+> Specific tooling is being planned for [building distribution packages](https://github.com/f1yn/cockpit-ultralight/issues/1).
 
 ## Using
 
@@ -57,7 +58,8 @@ npm run link:local
 npm run dev
 ```
 
-> Until live reloads are figured out, you'll need to manually refresh that page after updates
+After changes are made, assuming you followed the link directions, the plugin will refresh the page
+automatically!
 
 ## Example
 

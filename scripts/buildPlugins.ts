@@ -7,14 +7,13 @@ import path from 'node:path';
 const distDirectoryAbsolute = path.resolve(import.meta.dirname, '../dist');
 const staticDirectoryAbsolute = path.resolve(import.meta.dirname, '../static');
 
-// Cleans dist, and also copies the files from static to dist when a build starts
+// Cleans dist, and also copies the files from static to dist when a build starts (initial copy)
 export const cleanAndCopyPlugin: Plugin = {
     name: 'copy',
-    setup(build) {
-        build.onStart(async () => {
-            await cleanDistDirectory();
-            await copyStaticDirectory();
-        });
+    async setup() {
+        // Only run this once at startup!
+        await cleanDistDirectory();
+        await copyStaticDirectory();
     }
 }
 
