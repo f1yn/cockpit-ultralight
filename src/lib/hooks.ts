@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import cockpit, { Cockpit } from 'cockpit';
-
-type fileWatchArguments = Parameters<typeof cockpit.file>;
+import cockpit from 'cockpit';
+import type { FileOpenOptions, FileWatchCallback, SpawnOptions } from 'cockpit';
 
 /**
  * Watches a file on the host system, updates it's result when changes are made.
@@ -10,19 +9,29 @@ type fileWatchArguments = Parameters<typeof cockpit.file>;
  * @param fileWatchOptions Options for the file handler
  * @returns The contexts of the file, along with any potential exceptions
  */
-export function useFileWatch<resultType = string>(path: fileWatchArguments[0], fileWatchOptions?: fileWatchArguments[1]) {
-    type fileWatchCallbackResult = Parameters<Cockpit.FileWatchCallback<resultType>>;
-    const [result, setResult] = useState<fileWatchCallbackResult>();
+export function useFileWatch<resultType = string>(
+	path: string,
+	fileWatchOptions?: FileOpenOptions,
+) {
+	type fileWatchCallbackResult = Parameters<FileWatchCallback<resultType>>;
+	const [result, setResult] = useState<fileWatchCallbackResult>();
 
-    useEffect(() => {
-        const watch =
-            fileWatchOptions ?
-                cockpit.file(path, fileWatchOptions).watch((...result) => setResult(result as fileWatchCallbackResult)) :
-                cockpit.file(path).watch((...result) => setResult(result as fileWatchCallbackResult));
-        return () => watch.remove();
-    }, [path, fileWatchOptions])
+	useEffect(() => {
+		const watch = fileWatchOptions
+			? cockpit
+					.file(path, fileWatchOptions)
+					.watch((...result) =>
+						setResult(result as fileWatchCallbackResult),
+					)
+			: cockpit
+					.file(path)
+					.watch((...result) =>
+						setResult(result as fileWatchCallbackResult),
+					);
+		return () => watch.remove();
+	}, [path, fileWatchOptions]);
 
-    return result || [];
+	return result || [];
 }
 
 /**
@@ -31,26 +40,31 @@ export function useFileWatch<resultType = string>(path: fileWatchArguments[0], f
  * @param command The command or bash script code to execute
  * @param args Additional arguments to the provided command
  * @param spawnOptions Additional spawn commands
- * @returns 
+ * @returns
  */
-export function useCommandResult<resultType = string>(command: string, args?: string[], spawnOptions?: Cockpit.SpawnOptions) {
-    const [result, setResult] = useState<resultType | null>(null);
-    const [message, setMessage] = useState<string | null>(null);
-    const [exceptionString, setExceptionString] = useState<Cockpit.ProcessException | null>(null);
+export function useCommandResult<resultType = string>(
+	command: string,
+	args?: string[],
+	spawnOptions?: SpawnOptions & { binary?: false },
+) {
+	const [result, setResult] = useState<resultType | null>(null);
+	const [message, setMessage] = useState<string | null>(null);
+	const [exceptionString, setExceptionString] = useState<Error | null>(null);
 
-    useEffect(() => {
-        cockpit.script<resultType>(command, args, spawnOptions)
-            .then((result, message) => {
-                setResult(result);
-                setMessage(message || null);
-                setExceptionString(null);
-            })
-            .catch((errorMessage, otherResult) => {
-                setExceptionString(errorMessage);
-                setMessage(null);
-                setResult(null);
-            });
-    }, [command, args, spawnOptions])
+	useEffect(() => {
+		cockpit
+			.script(command, args ?? [], spawnOptions)
+			.done((data, message) => {
+				setResult(data as resultType);
+				setMessage(message || null);
+				setExceptionString(null);
+			})
+			.fail((errorMessage) => {
+				setExceptionString(errorMessage);
+				setMessage(null);
+				setResult(null);
+			});
+	}, [command, args, spawnOptions]);
 
-    return [result, exceptionString, message] as const;
+	return [result, exceptionString, message] as const;
 }

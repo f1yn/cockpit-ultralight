@@ -1,56 +1,48 @@
-import esbuild, { Plugin } from 'esbuild';
-import { cleanAndCopyPlugin, skipPatternflyStyles, watchStaticDirPlugin } from './buildPlugins';
+// esbuild build for this cockpit plugin.
+//
+// Sourcemap policy: maps are emitted for development builds only; production never writes
+// `.map` files into the shipped plugin directory.
 
-// Setup some environment flags for readability
+import esbuild from 'esbuild';
+import path from 'node:path';
+
+import { buildPlugins } from './buildPlugins.ts';
+import { DIST_DIR, SRC_DIR } from './shared/project.ts';
+
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = !isDevelopment;
 
-// Create the build context using Esbuild
-// https://esbuild.github.io/api/#build
 const context = await esbuild.context({
-    // We are targeting esm for the ability to dynamic import using esbuild
-    // Cockpit only supports browser versions with existing support for import() and es modules
-    // https://cockpit-project.org/running.html
-    // https://caniuse.com/es6-module-dynamic-import
-    format: 'esm',
-    target: ["es2020"],
-    bundle: true,
-    splitting: true,
-    entryPoints: ['./src/app.tsx', './src/init.ts'],
-    outdir: './dist',
-    // Environment specific configurations
-    metafile: isProduction,
-    minify: isProduction,
-    sourcemap: isDevelopment,
-    logLevel: isDevelopment ? 'info' : 'error',
-    plugins: [
-        // in static and dev builds, make sure we clean and populate dist with the files in static
-        cleanAndCopyPlugin,
-        // We inherit styles from the parent cockpit window, so we don't need to bundle patternfly styles
-        // if you do diverge from from the patternfly version from cockpit, removing this plugin will bundle
-        // patternfly app styles
-        skipPatternflyStyles,
-        // copies static files (again) when they're modified in development
-        isDevelopment && watchStaticDirPlugin,
-    ].filter(Boolean) as Plugin[],
-    // Enable better tree shaking by adding in the webpack classic flag here
-    // we also use it to allow reloading during a watch build
-    define: {
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
-    }
+	// ESM target: cockpit only supports browsers with import() and ES modules.
+	// https://cockpit-project.org/running.html
+	format: 'esm',
+	target: ['es2020'],
+	bundle: true,
+	splitting: true,
+	entryPoints: [path.join(SRC_DIR, 'app.tsx'), path.join(SRC_DIR, 'init.ts')],
+	outdir: DIST_DIR,
+	metafile: isProduction,
+	minify: isProduction,
+	sourcemap: isDevelopment,
+	logLevel: isDevelopment ? 'info' : 'error',
+	plugins: buildPlugins(isDevelopment),
+	// Lets esbuild drop the dev-only branches below (and in src/init.ts).
+	define: {
+		'process.env.NODE_ENV': JSON.stringify(
+			process.env.NODE_ENV || 'production',
+		),
+	},
 });
 
-
 if (isDevelopment) {
-    // Enter watching mode
-    await context.watch();
+	await context.watch();
 } else {
-    // Single build iteration (reutilize context here so we don't need to pass an object around)
-    const result = await context.rebuild();
-    // Print the build results
-    console.log(await esbuild.analyzeMetafile(result.metafile!, {
-        verbose: true,
-    }))
-    // Immediately close the context since we aren't using it anymore
-    context.dispose();
+	const result = await context.rebuild();
+	// The metafile only exists for production builds.
+	if (result.metafile) {
+		console.log(
+			await esbuild.analyzeMetafile(result.metafile, { verbose: true }),
+		);
+	}
+	await context.dispose();
 }

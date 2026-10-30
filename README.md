@@ -71,12 +71,38 @@ npm install
 
 That's it.
 
+### Configuring the plugin
+
+Set the project name, cockpit menu title and minimum cockpit version, then install and
+refresh the vendored types:
+
+```sh
+npm run setup
+```
+
+It prompts for every value (accepting the current ones as defaults) and prints
+`npm run build` and `npm run link:local` as the next steps — setup does not build or link for
+you. For automation, pass the values directly:
+
+```sh
+npm run setup -- --name my-plugin --title "My Plugin" --cockpit 360 --yes
+```
+
+Add `--dry-run` to preview, or `--help` for the full flag list. The cockpit version is a bare
+number, never an operator — see
+[Compatibility](#compatibility-requirescockpit-is-a-bare-version).
+
+The README is not touched by the script: rewriting it into your plugin's own documentation is
+an editorial job. Agents do it from `.agents/skills/setup/SKILL.md`, which asks for a
+one-paragraph description and then replaces the template intro, the starter-project pitch and
+the demo screenshots while keeping the sections below `## Setting up`.
+
 ### Building and testing (any Linux, any shell)
 
 1. Produce a static production build of the project with the following command
 
     ```sh
-    npm build
+    npm run build
     ```
 
 2. Link the project to your local environment
@@ -93,6 +119,73 @@ That's it.
 
 After changes are made, assuming you followed the link directions, the plugin will refresh the page
 automatically!
+
+### Checks
+
+One canonical command per concern, all offline:
+
+-   `npm run typecheck` — `tsc --noEmit` with `strict` on
+-   `npm run format:check` — formatting gate ([oxfmt](https://oxc.rs/docs/guide/usage/formatter))
+-   `npm run sync:cockpit-types -- --check` — verifies `vendor/cockpit-types/` against its pinned provenance hashes
+-   `npm run check` — format, types, vendored-type drift, then a production build
+
+`vendor/cockpit-types/` is a byte-for-byte snapshot of cockpit's upstream JS API types
+taken at a pinned commit. Never edit it by hand: `npm run sync:cockpit-types` refreshes it
+and rewrites `provenance.json`. Those files keep their upstream licenses (`GPL-3.0-or-later`
+and `LGPL-2.1-or-later`); this project's own code stays MIT. The split is recorded in
+[`vendor/cockpit-types/NOTICE`](./vendor/cockpit-types/NOTICE).
+
+### Installing on a cockpit host
+
+Cockpit scans two package locations, and `cockpit-bridge` is the authority on both:
+
+-   **Per-user** — `~/.local/share/cockpit/<project>/` (what `npm run link:local` targets locally)
+-   **System-wide** — `/usr/share/cockpit/<project>/` (requires root)
+
+Confirm the plugin was actually discovered, rather than assuming it:
+
+```sh
+cockpit-bridge --packages
+```
+
+That prints every package cockpit can see, with its menu label and path. If the plugin is
+missing from the cockpit menu, it is almost always a rejected `manifest.json`: the bridge
+logs the reason and silently drops the package.
+
+### Compatibility: `requires.cockpit` is a bare version
+
+`manifest.json`'s `requires.cockpit` is a **minimum version written as a bare number**:
+
+```json
+{ "requires": { "cockpit": "360" } }
+```
+
+**Not** `">= 360"`. Cockpit compares `sortify_version(required) > running_version`, so any
+comparison operator sorts *above* every numeric version and fails permanently — the bridge
+logs `required cockpit version (>= 360) not met` and the plugin never appears. Raise the
+number to the oldest cockpit generation that supports everything this project relies on:
+PatternFly 6 class names (e.g. `pf-v6-theme-dark`) and the `cockpit.file` / `cockpit.script`
+/ `cockpit.format` APIs. Cockpit 360 satisfies both.
+
+### Publishing to a remote cockpit
+
+`link:local` symlinks `dist/` for a cockpit on this machine. For a cockpit on another
+host, publish the build over SSH:
+
+```sh
+npm run deploy -- --target user@host --dry-run   # preview the file list
+npm run deploy -- --target user@host --yes       # mirror dist/ into ~/.local/share/cockpit/<name>
+```
+
+**Requires `rsync`** (macOS ships openrsync; Linux packages it) plus `ssh` key access to
+the target — there is no fallback transport. It mirrors, so files removed locally disappear
+remotely; pass `--no-delete` for an additive copy. `--path` overrides the remote directory —
+required for a system-wide `/usr/share/cockpit/<name>` install — and `--port` handles a
+non-default SSH port; `--help` lists every flag. It refuses to publish an incomplete `dist/`,
+refuses `rsync --delete` into a directory that does not end with the project name, stores no
+credentials, and verifies the remote file count after transferring.
+
+Agents get the same behaviour from `.agents/skills/deploy/SKILL.md`.
 
 ## Example
 
@@ -115,6 +208,9 @@ automatically!
 -   `dist/` The build output directory (not in the project tree)
 -   `static/` Static files that are needed for the Cockpit plugin to function. Any files added or edited here will be reflected during live development (placed into `dist/`), or added during production builds
 -   `scripts/` Scripts needed for building, editing and maintaining the project
+-   `scripts/shared/` Helpers shared by those scripts (CLI prompts, flags, subprocesses, paths)
+-   `scripts/.deploy-remote.sh` Machine-local deploy helper (gitignored; `npm run deploy` supersedes it)
+-   `vendor/cockpit-types/` Pinned, hash-gated snapshot of cockpit's upstream API types (generated, never hand-edited)
 
 ## Adding styles
 

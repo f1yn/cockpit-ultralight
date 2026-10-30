@@ -1,5 +1,7 @@
 .vscode/
 .idea/
+.pi/
 build/
 dist/
 node_modules/
+scripts/.deploy-remote.sh

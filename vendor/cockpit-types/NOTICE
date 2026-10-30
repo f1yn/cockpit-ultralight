@@ -1,0 +1,31 @@
+NOTICE — vendored third-party code
+==================================
+
+vendor/cockpit-types/pkg/lib/** is copied verbatim from the Cockpit project:
+
+    https://github.com/cockpit-project/cockpit   (pkg/lib/cockpit.d.ts + its import closure)
+
+Pinned commit and per-file sha256: provenance.json (upstream_ref, files).
+Refresh with `npm run sync:cockpit-types`; verify offline with `npm run sync:cockpit-types -- --check`.
+Do not edit these files by hand — the hash gate rejects it.
+
+Licensing
+---------
+
+Each vendored file keeps its own SPDX header, which is authoritative. They are not all
+under one license:
+
+    GPL-3.0-or-later    pkg/lib/cockpit.d.ts
+                        pkg/lib/cockpit/channel.ts
+                        pkg/lib/cockpit/event.ts
+                        pkg/lib/cockpit/_internal/info.ts
+
+    LGPL-2.1-or-later   pkg/lib/cockpit/_internal/common.ts
+                        pkg/lib/cockpit/_internal/transport.ts
+                        pkg/lib/cockpit/_internal/location-utils.ts
+                        pkg/lib/cockpit/_internal/parentwebsocket.ts
+
+Everything else in this repository is MIT — see ../../LICENSE. The licenses above apply only
+to the files listed here; they do not relicense the project.
+
+local-stubs/common.d.ts is NOT upstream code: it is owned by this project and MIT-licensed.

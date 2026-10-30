@@ -6,16 +6,26 @@
 		"lib": ["dom", "es2020"],
 		"paths": {
 			"cockpit": ["./src/lib/cockpit"],
+			"cockpit-api": ["./src/lib/cockpit-api"],
 			"@lib/*": ["./src/lib/*"],
+			"_internal/*": ["./vendor/cockpit-types/local-stubs/*"],
 			"@assets/*": [
 				"node_modules/@patternfly/react-core/dist/styles/assets/*"
 			]
 		},
 		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"erasableSyntaxOnly": true,
 		"noEmit": true,
 		"strict": true,
-		"module": "es2020",
+		"skipLibCheck": true,
+		"exactOptionalPropertyTypes": true,
+		"module": "preserve",
 		"target": "es2020"
 	},
-	"include": ["src/**/*"]
+	"include": [
+		"src/**/*",
+		"scripts/**/*",
+		"vendor/cockpit-types/pkg/lib/cockpit.d.ts"
+	]
 }

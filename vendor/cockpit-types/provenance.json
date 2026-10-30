@@ -1,0 +1,15 @@
+{
+	"upstream_repo": "cockpit-project/cockpit",
+	"upstream_ref": "2034c57b761aa5a35f12e064a494a7b53358efda",
+	"upstream_version": null,
+	"files": {
+		"pkg/lib/cockpit.d.ts": "5aa09f02bf33037e8c08def946943635d211dedd188498822c92dc663db19a4c",
+		"pkg/lib/cockpit/_internal/info.ts": "5f92ceceb9499ddec0914f697e9fced705d10f9a7f87e41755f2c0408f8695dc",
+		"pkg/lib/cockpit/channel.ts": "c79422e88a05c84d99e1295a83a8374d96b270eb6d314f613271462cad860e66",
+		"pkg/lib/cockpit/_internal/common.ts": "b50fcd8fe8e4d2874f7d50a52fe24f388153b0ffa7e60a5a4e6c89b036612a37",
+		"pkg/lib/cockpit/_internal/transport.ts": "a521d11b49deabfc6f0d76f4295db2a9458b2ef77acc929aacfa6c81c33afbb6",
+		"pkg/lib/cockpit/event.ts": "45a4f516928e947edcf9bd8a348a236357457e9a67c1cfaf28052ac7c32c3106",
+		"pkg/lib/cockpit/_internal/location-utils.ts": "dd0d4d88fa1465270b725188c3b378cae1ce4d67809be7ee6f4a734a1d42c43d",
+		"pkg/lib/cockpit/_internal/parentwebsocket.ts": "39b11cae5b63d02f23e9fbd2f8ef8961ed43741305eb0f492be3da6ed6b7ef12"
+	}
+}

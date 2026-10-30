@@ -1,36 +1,37 @@
 {
 	"name": "cockpit-ultralight",
-	"description": "Minimal scaffolding for a cockpit module (tsx + esbuld)",
+	"description": "Minimal scaffolding for a cockpit module (node type stripping + esbuild)",
 	"type": "module",
 	"author": "Flynn Buckingham",
 	"license": "MIT",
 	"engines": {
-		"node": ">= 20"
+		"node": ">= 26"
 	},
 	"scripts": {
-		"dev": "NODE_ENV=development tsx ./scripts/build.ts",
-		"build": "tsx ./scripts/build.ts",
+		"dev": "NODE_ENV=development node ./scripts/build.ts",
+		"build": "node ./scripts/build.ts",
+		"typecheck": "tsc --noEmit",
+		"format": "oxfmt",
+		"format:check": "oxfmt --check",
+		"check": "npm run format:check && npm run typecheck && npm run sync:cockpit-types -- --check && npm run build",
+		"sync:cockpit-types": "node ./scripts/sync-cockpit-types.ts",
+		"setup": "node ./scripts/setup.ts",
+		"deploy": "node ./scripts/deploy.ts",
 		"build:package": "./scripts/package.sh",
 		"link:local": "ln -s $PWD/dist \"$HOME/.local/share/cockpit/$(basename $PWD)\""
 	},
 	"dependencies": {
-		"@patternfly/react-core": "5.2.3",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
+		"@patternfly/react-core": "^6.7.0",
+		"react": "^19.3.1",
+		"react-dom": "^19.3.1"
 	},
 	"devDependencies": {
-		"@types/node": "20.11.30",
-		"@types/react": "^18.2.69",
-		"@types/react-dom": "^18.2.22",
-		"esbuild": "^0.20.2",
-		"prettier": "^3.2.5",
-		"tsx": "^4.7.1",
-		"typescript": "^5.4.3"
-	},
-	"prettier": {
-		"useTabs": true,
-		"options": {
-			"editorconfig": true
-		}
+		"@types/node": "^26.6.6",
+		"@types/react": "^19.3.0",
+		"@types/react-dom": "^19.3.0",
+		"citty": "^0.2.2",
+		"esbuild": "^0.28.2",
+		"oxfmt": "^0.75.0",
+		"typescript": "~5.9.0"
 	}
 }
